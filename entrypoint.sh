@@ -29,6 +29,6 @@ while true; do
     echo "Synchronisation en cours..."
     rclone sync /data gdrive-service-d:instances/$INSTANCE_ID/data
     echo "Synchronisation terminée. Prochaine tentative dans 5 minutes."
-    sleep 300
+    sleep 30
 done
 

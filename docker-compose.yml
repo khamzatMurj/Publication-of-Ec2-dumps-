@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  peaqock-imad:
+    build:
+      context: .               # Dossier contenant le Dockerfile
+      dockerfile: Dockerfile   # Optionnel si le nom est Dockerfile
+    container_name: peaqock2
+    volumes:
+      - /home/$USER/data2:/data
+      - /home/$USER/sa.json:/root/sa.json
+    command: >
+      sh -c "./entrypoint.sh && tail -f /dev/null"
+    restart: unless-stopped
