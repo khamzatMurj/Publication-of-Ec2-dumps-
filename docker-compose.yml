@@ -6,9 +6,13 @@ services:
       context: .               # Dossier contenant le Dockerfile
       dockerfile: Dockerfile   # Optionnel si le nom est Dockerfile
     container_name: peaqock2
+    environment:
+      - ENCRYPTION_PASSWORD=Peaq0ck_S3cr3t_K3y_2025!
+      - ENABLE_ENCRYPTION=false
     volumes:
-      - /home/$USER/data2:/data
-      - /home/$USER/sa.json:/root/sa.json
+      - ./data2:/data
+      - ./sa.json:/root/sa.json
+      - ./logs:/logs
     command: >
       sh -c "./entrypoint.sh && tail -f /dev/null"
     restart: unless-stopped
