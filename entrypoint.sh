@@ -38,16 +38,16 @@ echo "Dossier distant prêt."
 # Synchronisation régulière des fichiers locaux vers le Drive
 while true; do
     echo "Synchronisation en cours..."
-    # Boucle sur le contenu de /data pour chiffrer chaque fichier avec openssl et une clé passée via variable d'env DOCKER_COMPOSE
+
+    # Chiffrer tous les fichiers non chiffrés dans /data
     for file in /data/*; do
         if [ -f "$file" ]; then
-            filename=$(basename "$file")
-            encrypted_file="/data/${filename}.enc"
-            # Vérifie si le fichier n'est pas déjà chiffré
+            # Ne pas traiter les fichiers déjà chiffrés
             if [[ "$file" != *.enc ]]; then
-                # Chiffre le fichier avec openssl (AES-256-CBC) et la clé de la variable d'env ENCRYPT_KEY
-                openssl enc -aes-256-cbc -salt -in "$file" -out "$encrypted_file" -pass pass:"$ENCRYPTION_PASSWORD"
-                if [ $? -eq 0 ]; then
+                filename=$(basename "$file")
+                encrypted_file="/data/${filename}.enc"
+                # Chiffre le fichier avec openssl (AES-256-CBC) et la clé de la variable d'env ENCRYPTION_PASSWORD
+                if openssl enc -aes-256-cbc -salt -in "$file" -out "$encrypted_file" -pass pass:"$ENCRYPTION_PASSWORD"; then
                     rm -f "$file"
                     logs "Fichier $filename chiffré avec succès."
                 else
@@ -57,7 +57,17 @@ while true; do
             fi
         fi
     done
-    rclone move -P -v /data gdrive-service-d:instances/$INSTANCE_ID/data --delete-empty-src-dirs >> /logs/logs_transfert.txt 2>&1
+
+    # Déplacer uniquement les fichiers chiffrés (.enc) vers le Drive
+    if ls /data/*.enc 1> /dev/null 2>&1; then
+        echo ""
+        # rclone move -P -v /data/*.enc gdrive-service-d:instances/$INSTANCE_ID/data --delete-empty-src-dirs >> /logs/logs_transfert.txt 2>&1
+        for file in /data/*.enc; do
+            [ -e "$file" ] || continue
+            rclone move -P -v "$file" gdrive-service-d:instances/$INSTANCE_ID/data --delete-empty-src-dirs >> /logs/logs_transfert.txt 2>&1
+        done
+    fi
+
     echo "Synchronisation terminée. Prochaine tentative dans 30 secondes."
     sleep 30
 done
