@@ -46,7 +46,7 @@ while true; do
             # Vérifie si le fichier n'est pas déjà chiffré
             if [[ "$file" != *.enc ]]; then
                 # Chiffre le fichier avec openssl (AES-256-CBC) et la clé de la variable d'env ENCRYPT_KEY
-                openssl enc -aes-256-cbc -salt -in "$file" -out "$encrypted_file" -pass pass:"$ENCRYPT_KEY"
+                openssl enc -aes-256-cbc -salt -in "$file" -out "$encrypted_file" -pass pass:"$ENCRYPTION_PASSWORD"
                 if [ $? -eq 0 ]; then
                     rm -f "$file"
                     logs "Fichier $filename chiffré avec succès."
