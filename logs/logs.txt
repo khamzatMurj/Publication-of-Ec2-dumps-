@@ -134,3 +134,4 @@ Fri Jul 11 23:17:39 UTC 2025 - ✅ Fichier chiffré: /data/hamza21.txt -> /tmp/e
 Fri Jul 11 23:17:39 UTC 2025 - 📁 Fichier chiffré: hamza21.txt
 Fri Jul 11 23:17:39 UTC 2025 - 🔐 Chiffrement terminé. Fichiers chiffrés dans: /tmp/encrypted_data
 Sat Jul 12 08:03:07 UTC 2025 - Fichier hamza.txt chiffré avec succès.
+Sat Jul 12 08:30:52 UTC 2025 - Fichier hamdi.txt chiffré avec succès.
